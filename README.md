@@ -1,5 +1,7 @@
 # Onebody Music Lyrics
 
+## Project Structure
+
 ```
 onebody-music-lyrics/
 ├── package.json
