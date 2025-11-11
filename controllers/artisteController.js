@@ -3,7 +3,7 @@
 // // Create a new artiste
 // export const createArtiste = async (req, res, next) => {
 //   try {
-//     const { name, image, desc } = req.body;
+//     const { name, desc } = req.body;
 
 //     if (!name) {
 //       return res.status(400).json({
@@ -11,6 +11,9 @@
 //         message: 'Name is required'
 //       });
 //     }
+
+//     // Get image path if uploaded
+//     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
 //     const artiste = await Artiste.create({
 //       name,
@@ -83,7 +86,7 @@
 // export const updateArtiste = async (req, res, next) => {
 //   try {
 //     const { id } = req.params;
-//     const { name, image, desc } = req.body;
+//     const { name, desc } = req.body;
 
 //     const artiste = await Artiste.findByPk(id);
 
@@ -94,9 +97,12 @@
 //       });
 //     }
 
+//     // Get new image path if uploaded
+//     const image = req.file ? `/uploads/${req.file.filename}` : artiste.image;
+
 //     await artiste.update({
 //       name: name || artiste.name,
-//       image: image !== undefined ? image : artiste.image,
+//       image: image,
 //       desc: desc !== undefined ? desc : artiste.desc
 //     });
 
