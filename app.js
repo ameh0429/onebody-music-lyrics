@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { sequelize } from './config/database.js';
+import authRoutes from './routes/authRoutes.js';
 import artisteRoutes from './routes/artisteRoutes.js';
 import albumRoutes from './routes/albumRoutes.js';
 import songRoutes from './routes/songRoutes.js';
@@ -14,7 +15,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
@@ -24,6 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/artistes', artisteRoutes);
 app.use('/api/albums', albumRoutes);
 app.use('/api/songs', songRoutes);
@@ -56,6 +58,7 @@ const startServer = async () => {
     
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     });
   } catch (error) {
     console.error('Unable to start server:', error);

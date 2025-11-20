@@ -1,34 +1,27 @@
 // import Artiste from './Artiste.js';
 // import Album from './Album.js';
-// import { Song, SongArtiste } from './Song.js';
+// import Song from './Song.js';
+// import AlbumArtiste from './AlbumArtiste.js';
+// import SongArtiste from './SongFeaturedArtiste.js';
 
-// // Define associations
+// // Define many-to-many associations
 
-// // Artiste has many Albums
-// Artiste.hasMany(Album, {
+// // Artiste <-> Album (many-to-many through AlbumArtiste)
+// Artiste.belongsToMany(Album, {
+//   through: AlbumArtiste,
 //   foreignKey: 'artisteId',
-//   as: 'albums',
-//   onDelete: 'CASCADE'
+//   otherKey: 'albumId',
+//   as: 'albums'
 // });
 
-// Album.belongsTo(Artiste, {
-//   foreignKey: 'artisteId',
-//   as: 'artiste'
+// Album.belongsToMany(Artiste, {
+//   through: AlbumArtiste,
+//   foreignKey: 'albumId',
+//   otherKey: 'artisteId',
+//   as: 'artistes'
 // });
 
-// // // Artiste has many Songs
-// // Artiste.hasMany(Song, {
-// //   foreignKey: 'artisteId',
-// //   as: 'songs',
-// //   onDelete: 'CASCADE'
-// // });
-
-// // Song.belongsTo(Artiste, {
-// //   foreignKey: 'artisteId',
-// //   as: 'artiste'
-// // });
-
-// // Many-to-Many: Artistes <-> Songs
+// // Artiste <-> Song (many-to-many through SongArtiste)
 // Artiste.belongsToMany(Song, {
 //   through: SongArtiste,
 //   foreignKey: 'artisteId',
@@ -43,7 +36,7 @@
 //   as: 'artistes'
 // });
 
-// // Album has many Songs
+// // Album -> Songs (one-to-many)
 // Album.hasMany(Song, {
 //   foreignKey: 'albumId',
 //   as: 'songs',
@@ -55,17 +48,17 @@
 //   as: 'album'
 // });
 
-// export { Artiste, Album, Song };
+// export { Artiste, Album, Song, AlbumArtiste, SongArtiste };
+
 
 import Artiste from './Artiste.js';
 import Album from './Album.js';
 import Song from './Song.js';
 import AlbumArtiste from './AlbumArtiste.js';
-import SongArtiste from './SongArtiste.js';
+import SongFeaturedArtiste from './SongFeaturedArtiste.js';
+import User from './User.js';
 
-// Define many-to-many associations
-
-// Artiste <-> Album (many-to-many through AlbumArtiste)
+// Album <-> Artiste (many-to-many through AlbumArtiste)
 Artiste.belongsToMany(Album, {
   through: AlbumArtiste,
   foreignKey: 'artisteId',
@@ -80,19 +73,30 @@ Album.belongsToMany(Artiste, {
   as: 'artistes'
 });
 
-// Artiste <-> Song (many-to-many through SongArtiste)
-Artiste.belongsToMany(Song, {
-  through: SongArtiste,
+// Song -> Main Artiste (one-to-many)
+Artiste.hasMany(Song, {
   foreignKey: 'artisteId',
-  otherKey: 'songId',
-  as: 'songs'
+  as: 'mainSongs'
 });
 
+Song.belongsTo(Artiste, {
+  foreignKey: 'artisteId',
+  as: 'mainArtiste'
+});
+
+// Song <-> Featured Artistes (many-to-many through SongFeaturedArtiste)
 Song.belongsToMany(Artiste, {
-  through: SongArtiste,
+  through: SongFeaturedArtiste,
   foreignKey: 'songId',
   otherKey: 'artisteId',
-  as: 'artistes'
+  as: 'featuredArtistes'
+});
+
+Artiste.belongsToMany(Song, {
+  through: SongFeaturedArtiste,
+  foreignKey: 'artisteId',
+  otherKey: 'songId',
+  as: 'featuredSongs'
 });
 
 // Album -> Songs (one-to-many)
@@ -107,4 +111,4 @@ Song.belongsTo(Album, {
   as: 'album'
 });
 
-export { Artiste, Album, Song, AlbumArtiste, SongArtiste };
+export { Artiste, Album, Song, AlbumArtiste, SongFeaturedArtiste, User };
