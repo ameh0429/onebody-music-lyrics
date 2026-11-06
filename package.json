@@ -1,13 +1,18 @@
 {
   "name": "onebody-music-lyrics",
   "version": "1.0.0",
-  "type": "module",
-  "description": "",
-  "main": "app.js",
+  "description": "NestJS API for Onebody music, lyrics and user accounts",
+  "main": "dist/main.js",
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -p tsconfig.json",
+    "start": "npm run build && node dist/main.js",
+    "start:dev": "node --watch -r ts-node/register src/main.ts",
+    "dev": "npm run start:dev",
+    "start:prod": "node dist/main.js",
+    "typecheck": "tsc --noEmit",
+    "db:setup": "npm run build && node dist/database/setup.js",
+    "test": "npm run build && node test/validation.test.cjs",
+    "test:e2e": "npm run build && node test/e2e.cjs"
   },
   "repository": {
     "type": "git",
@@ -21,16 +26,35 @@
   },
   "homepage": "https://github.com/ameh0429/onebody-music-lyrics#readme",
   "dependencies": {
+    "@nestjs/common": "^11.1.0",
+    "@nestjs/core": "^11.1.0",
+    "@nestjs/platform-express": "^11.1.0",
+    "@nestjs/config": "^4.0.0",
+    "@nestjs/sequelize": "^11.0.0",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/swagger": "^11.0.0",
     "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
     "pg": "^8.16.3",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.7"
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "sequelize": "^6.37.7",
+    "sequelize-typescript": "^2.1.6"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.0",
+    "@types/multer": "^2.0.0",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0",
+    "ts-node": "^10.9.2"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }
